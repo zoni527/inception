@@ -1,12 +1,11 @@
-FROM alpine:3.21
+FROM ubuntu:24.04
 
-# Following instructions will be executed here
-WORKDIR /usr/src/app
+WORKDIR /mydir
 
-COPY hello.sh .
+RUN apt update && apt install -y curl python3 && apt install -y ffmpeg
+RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+RUN chmod a+x /usr/local/bin/yt-dlp
 
-# Build commands
-RUN touch additional.txt; chmod +x hello.sh
+ENTRYPOINT ["/usr/local/bin/yt-dlp"]
 
-# Command to run when docker container is run
-CMD ./hello.sh
+CMD ["https://www.youtube.com/watch?v=Aa55RKWZxxI"]
