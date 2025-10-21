@@ -6,6 +6,7 @@
 docker images
 docker image ls
 docker container ls
+docker volume ls
 
 docker pull <image>
 docker exec <command> <container>
