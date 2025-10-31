@@ -1,0 +1,3 @@
+ % docker run -d --rm -it --name secret_message devopsdockeruh/simple-web-service:ubuntu
+ % docker exec -it secret_message bash
+# tail -f ./text.log
