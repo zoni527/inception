@@ -26,6 +26,13 @@ docker logs [options] <container>
 
 docker run ubuntu sh -c 'echo "Hello, world!"'
 
+docker cp <./path_to_file/on_host> <name_of_container>:<path_to_file/on_container>
+
+docker diff
+
+# Create new image from modified running image
+docker commit <container id> <new image name>
+
 # Build image from dockerfile
 docker build -t <name> .
 
