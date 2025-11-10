@@ -1,0 +1,11 @@
+FROM ruby:3.1.0
+
+EXPOSE 3000
+
+WORKDIR /usr/src/app
+
+RUN gem install bundler:2.3.3
+
+COPY ./material-applications/rails-example-project/Gemfile* ./
+
+RUN bundle install
