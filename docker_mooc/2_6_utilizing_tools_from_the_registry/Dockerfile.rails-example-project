@@ -6,6 +6,14 @@ WORKDIR /usr/src/app
 
 RUN gem install bundler:2.3.3
 
-COPY ./material-applications/rails-example-project/Gemfile* ./
+COPY Gemfile* ./
 
 RUN bundle install
+
+COPY . .
+
+RUN rails db:migrate RAILS_ENV=production
+
+RUN rake assets:precompile
+
+CMD ["rails", "s", "-e", "production"]
