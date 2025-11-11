@@ -1,0 +1,20 @@
+FROM debian:stable
+
+WORKDIR /usr/src/app
+
+EXPOSE 8080
+
+# Get Go
+RUN apt-get update && apt-get install wget -y
+RUN wget https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.25.4.linux-amd64.tar.gz
+RUN rm ./go1.25.4.linux-amd64.tar.gz
+RUN apt-get remove wget -y
+
+# App
+COPY . .
+ENV REQUEST_ORIGIN=https://localhost:5000
+ENV GIN_MODE=release
+RUN /usr/local/go/bin/go build
+
+CMD ["./server"]
