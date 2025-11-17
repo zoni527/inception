@@ -1,0 +1,9 @@
+services:
+  yt-dlp-ubuntu:
+    image: zoni527/youtube-dl
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.yt-dlp
+    volumes:
+      - .:/mydir
+    container_name: yt-dlp
