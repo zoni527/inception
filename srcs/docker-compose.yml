@@ -1,0 +1,47 @@
+services:
+  mariadb:
+    image: mariadb:inception
+    volumes:
+      - vol_mariadb
+    networks:
+      - net_wordpress_mariadb
+    expose:
+      - ${MARIADB_PORT_INTERNAL:-3306}
+    secrets:
+      - mariadb_user_password
+      - mariadb_root_password
+
+  wordpress:
+    image: wordpress:inception
+  depends_on:
+    - mariadb
+  networks:
+    - net_wordpress_mariadb
+    - net_wordpress_nginx
+  secrets:
+    - wordpress_user_password
+    - wordpress_admin_password
+
+  ngingx:
+    image: nginx:inception
+    ports:
+      - ${NGINGX_PORT_HOST:-4321}
+    depends_on:
+      - wordpress
+
+networks:
+  net_wordpress_mariadb
+  net_wordpress_nginx
+
+volumes:
+  vol_mariadb:
+
+secrets:
+  mariadb_user_password:
+    file: $MARIADB_USER_PASSWORD_FILE
+  mariadb_root_password:
+    file: $MARIADB_ROOT_PASSWORD_FILE
+  wordpress_user_password:
+    file: $WORDPRESS_USER_PASSWORD_FILE
+  wordpress_admin_password:
+    file: $WORDPRESS_ADMIN_PASSWORD_FILE
