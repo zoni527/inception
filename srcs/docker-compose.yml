@@ -35,6 +35,7 @@ networks:
 
 volumes:
   vol_mariadb:
+  vol_wordpress:
 
 secrets:
   mariadb_user_password:
