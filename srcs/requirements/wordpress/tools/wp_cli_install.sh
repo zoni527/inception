@@ -1,6 +1,5 @@
 #!/bin/sh
 
-dbname=wordpress
 admin_user=bob
 admin_password=adminpwd
 admin_email=admin@site.fi
@@ -9,8 +8,8 @@ domain=jvarila.42.fr
 port=443
 
 dbname=wordpress
-dbuser=mysql
-dbpass=mysqlpwd
+dbuser=wp_user
+dbpass=userpwd
 dbhost=mariadb
 
 wp config create \

@@ -8,26 +8,37 @@ services:
     expose:
       - ${MARIADB_PORT_INTERNAL:-3306}
     secrets:
+      - mariadb_user
       - mariadb_user_password
       - mariadb_root_password
 
   wordpress:
     image: wordpress:inception
   depends_on:
-    - mariadb
+    mariadb:
+      condition: service_started
   networks:
     - net_wordpress_mariadb
     - net_wordpress_nginx
+  expose:
+    - ${WORDPRESS_PORT_INTERNAL:-443}
   secrets:
+    - wordpress_user
     - wordpress_user_password
+    - wordpress_user_email
+    - worspress_admin
     - wordpress_admin_password
+    - wordpress_admin_email
 
   ngingx:
     image: nginx:inception
     ports:
       - ${NGINGX_PORT_HOST:-4321}
+    networks:
+      - net_wordpress_nginx
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_started
 
 networks:
   net_wordpress_mariadb
@@ -38,11 +49,21 @@ volumes:
   vol_wordpress:
 
 secrets:
+  mariadb_user:
+    file: ${MARIADB_USER_FILE}
   mariadb_user_password:
-    file: $MARIADB_USER_PASSWORD_FILE
+    file: ${MARIADB_USER_PASSWORD_FILE}
   mariadb_root_password:
-    file: $MARIADB_ROOT_PASSWORD_FILE
+    file: ${MARIADB_ROOT_PASSWORD_FILE}
+  wordpress_user:
+    file: ${WORDPRESS_USER_FILE}
   wordpress_user_password:
-    file: $WORDPRESS_USER_PASSWORD_FILE
+    file: ${WORDPRESS_USER_PASSWORD_FILE}
+  wordpress_user_email:
+    file: ${WORDPRESS_USER_EMAIL_FILE}
+  wordpress_admin:
+    file: ${WORDPRESS_ADMIN_FILE}
   wordpress_admin_password:
-    file: $WORDPRESS_ADMIN_PASSWORD_FILE
+    file: ${WORDPRESS_ADMIN_PASSWORD_FILE}
+  wordpress_admin_email:
+    file: ${WORDPRESS_ADMIN_EMAIL_FILE}

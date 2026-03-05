@@ -8,6 +8,12 @@ RUN apk update && \
 		php83 \
 		php83-phar \
 		php83-mysqli \
+		php83-fpm \
+		php83-mbstring \
+		php83-dom \
+		php83-gd \
+		php83-zip \
+		php83-curl \
 		wget
 
 RUN wget https://wordpress.org/latest.tar.gz && \
