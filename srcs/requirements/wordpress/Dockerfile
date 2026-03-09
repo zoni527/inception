@@ -1,5 +1,6 @@
 # Penultimate stable alpine image as base
 FROM alpine:3.22
+
 WORKDIR /app
 
 # Get WordPress dependencies
