@@ -33,7 +33,7 @@ services:
   ngingx:
     image: nginx:inception
     ports:
-      - ${NGINGX_PORT_HOST:-4321}
+      - ${NGINX_PORT_HOST:-443}:${NGINX_PORT_INTERNAL:-443}
     networks:
       - net_wordpress_nginx
     depends_on:
