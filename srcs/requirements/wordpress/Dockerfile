@@ -1,9 +1,8 @@
-# Penultimate stable alpine image as base
 FROM alpine:3.22
 
 WORKDIR /app
 
-# Get WordPress dependencies
+# WordPress dependencies
 RUN apk update && \
 	apk add --no-cache \
 		php83 \
@@ -17,6 +16,7 @@ RUN apk update && \
 		php83-curl \
 		wget
 
+# WordPress files and client (php archive) from tarball
 RUN wget https://wordpress.org/latest.tar.gz && \
 	tar -xzvf latest.tar.gz && \
 	mv wordpress/* . && \
@@ -28,4 +28,6 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 
 COPY ./tools/wp_cli_install.sh .
 
-RUN chmod +x ./wp_cli_install.sh && ./wp_cli_install.sh
+EXPOSE 9000
+
+RUN chmod +x ./wp_cli_install.sh # && ./wp_cli_install.sh
