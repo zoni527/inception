@@ -16,7 +16,10 @@ RUN envsubst '${DOMAIN_NAME} ${NGINX_PORT_INTERNAL} ${WORDPRESS_PORT_INTERNAL}' 
 	apk del envsubst
 
 RUN mkdir -p /etc/nginx/ssl && \
-	openssl req -x509 -newkey rsa:4096 -noenc 2>/dev/null \
+	openssl	req -x509 -newkey rsa:4096 -noenc 2>/dev/null \
 	-keyout	/etc/nginx/ssl/private.key \
 	-out	/etc/nginx/ssl/public.crt \
+	-days	3650 \
 	-subj	"/C=FI/ST=Uusimaa/L=Helsinki/O=42/OU=Hive/CN=${DOMAIN_NAME}"
+
+EXPOSE ${NGINX_PORT_INTERNAL}

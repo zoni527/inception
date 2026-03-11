@@ -1,8 +1,11 @@
 services:
   mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
     image: mariadb:inception
+    env_file: ./.env
     volumes:
-      - vol_mariadb
+      - mariadb_data:/var/lib/mysql
     networks:
       - net_wordpress_mariadb
     expose:
@@ -11,42 +14,66 @@ services:
       - mariadb_user
       - mariadb_user_password
       - mariadb_root_password
+    restart: unless-stopped
 
   wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
     image: wordpress:inception
-  depends_on:
-    mariadb:
-      condition: service_started
-  networks:
-    - net_wordpress_mariadb
-    - net_wordpress_nginx
-  expose:
-    - ${WORDPRESS_PORT_INTERNAL:-443}
-  secrets:
-    - wordpress_user
-    - wordpress_user_password
-    - wordpress_user_email
-    - worspress_admin
-    - wordpress_admin_password
-    - wordpress_admin_email
+    env_file: ./.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - wordpress_mariadb
+      - nginx_wordpress
+    expose:
+      - ${WORDPRESS_PORT_INTERNAL:-9000}
+    secrets:
+      - wordpress_user
+      - wordpress_user_password
+      - wordpress_user_email
+      - worspress_admin
+      - wordpress_admin_password
+      - wordpress_admin_email
+    restart: unless-stopped
 
   ngingx:
+    container_name: nginx
+    build: ./requirements/nginx
     image: nginx:inception
-    ports:
-      - ${NGINX_PORT_HOST:-443}:${NGINX_PORT_INTERNAL:-443}
-    networks:
-      - net_wordpress_nginx
+    env_file: ./.env
     depends_on:
-      wordpress:
-        condition: service_started
-
-networks:
-  net_wordpress_mariadb
-  net_wordpress_nginx
+      - wordpress
+    networks:
+      - nginx_wordpress
+    ports:
+      - "${NGINX_PORT_HOST:-443}:${NGINX_PORT_INTERNAL:-443}"
+    restart: unless-stopped
 
 volumes:
-  vol_mariadb:
-  vol_wordpress:
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/mariadb
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/wordpress
+
+networks:
+  wordpress_mariadb:
+    driver: bridge
+  nxinx_wordpress:
+    driver: bridge
 
 secrets:
   mariadb_user:

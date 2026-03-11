@@ -11,3 +11,5 @@ https://stackoverflow.com/questions/40801772/what-is-the-difference-between-port
 https://stackoverflow.com/questions/11245144/replace-whole-line-containing-a-string-using-sed
 https://stackoverflow.com/questions/49118579/alpine-dockerfile-advantages-of-no-cache-vs-rm-var-cache-apk
 https://www.baeldung.com/linux/nginx-config-environment-variables
+https://docs.openssl.org/master/man1/openssl-req/#options
+https://www.php.net/manual/en/install.fpm.configuration.php
