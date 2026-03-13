@@ -7,7 +7,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
-      - net_wordpress_mariadb
+      - wordpress_mariadb
     expose:
       - ${MARIADB_PORT_INTERNAL:-3306}
     secrets:
@@ -35,7 +35,7 @@ services:
       - wordpress_user
       - wordpress_user_password
       - wordpress_user_email
-      - worspress_admin
+      - wordpress_admin
       - wordpress_admin_password
       - wordpress_admin_email
     restart: unless-stopped
@@ -72,7 +72,7 @@ volumes:
 networks:
   wordpress_mariadb:
     driver: bridge
-  nxinx_wordpress:
+  nginx_wordpress:
     driver: bridge
 
 secrets:
