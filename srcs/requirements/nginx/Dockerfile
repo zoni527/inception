@@ -23,3 +23,5 @@ RUN mkdir -p /etc/nginx/ssl && \
 	-subj	"/C=FI/ST=Uusimaa/L=Helsinki/O=42/OU=Hive/CN=${DOMAIN_NAME}"
 
 EXPOSE ${NGINX_PORT_INTERNAL}
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

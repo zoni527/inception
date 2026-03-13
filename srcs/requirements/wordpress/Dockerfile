@@ -28,10 +28,12 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 # Config for php FastCGI Process Manager
 COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
 
-COPY ./tools/wp_cli_install.sh .
-RUN chmod +x ./wp_cli_install.sh
-
 # -H: no home, -D: no password, -s: login shell, -G: add group also
 RUN adduser -H -D -s /sbin/nologin -G www-data www-data
 
+COPY ./tools/wp_cli_install.sh .
+RUN chmod +x ./wp_cli_install.sh
+
 EXPOSE 9000
+
+ENTRYPOINT ["./wp_cli_install.sh"]

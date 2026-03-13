@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/ash
 admin_user=bob
 admin_password=adminpwd
 admin_email=admin@site.fi
@@ -39,3 +38,5 @@ if [ ! -f /app/wp-config.php ]; then
 
 	chown -R www-data:www-data /app
 fi
+
+exec php-fpm83 -F

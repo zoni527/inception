@@ -15,6 +15,8 @@ services:
       - mariadb_user_password
       - mariadb_root_password
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "--host=localhost", "--protocol=tcp"]
 
   wordpress:
     container_name: wordpress
@@ -25,7 +27,7 @@ services:
       mariadb:
         condition: service_healthy
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/app
     networks:
       - wordpress_mariadb
       - nginx_wordpress
