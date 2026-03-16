@@ -1,19 +1,19 @@
 #!/bin/ash
-admin_user=bob
-admin_password=adminpwd
-admin_email=admin@site.fi
-title="jvarila's inception wordpress site"
-domain=localhost
-port=9000
+admin_user="$(cat /run/secrets/wordpress_admin)"
+admin_password="$(cat /run/secrets/wordpress_admin_password)"
+admin_email="$(cat /run/secrets/wordpress_admin_email)"
+title=${WORDPRESS_SITE_TITLE:-Inception}
+domain=${DOMAIN_NAME:-localhost}
+port=${WORDPRESS_PORT_INTERNAL:-9000}
 
-dbname=wordpress
-dbuser=wp_user
-dbpass=userpwd
-dbhost=mariadb:3306
+dbname=${MARIADB_DATABASE_NAME:-wordpress}
+dbuser="$(cat /run/secrets/mariadb_user)"
+dbpass="$(cat /run/secrets/mariadb_user_password)"
+dbhost=${DATABASE_HOSTNAME:-mariadb}:${MARIADB_PORT_INTERNAL:-9000}
 
-wordpress_user=harry
-wordpress_user_email=potter@hogwarts.uk
-wordpress_user_password=imawizard
+wordpress_user="$(cat /run/secrets/wordpress_user)"
+wordpress_user_email="$(cat /run/secrets/wordpress_user_email)"
+wordpress_user_password="$(cat /run/secrets/wordpress_user_password)"
 
 if [ ! -f /app/wp-config.php ]; then
 	wp config create \

@@ -1,8 +1,12 @@
 services:
   mariadb:
-    container_name: mariadb
-    build: ./requirements/mariadb
+    container_name: ${DATABASE_HOSTNAME:-mariadb}
+    build:
+      context: ./requirements/mariadb
+      args:
+        MYSQL_TCP_PORT: ${MARIADB_PORT_INTERNAL:-3306}
     image: mariadb:inception
+    pull_policy: build
     env_file: ./.env
     volumes:
       - mariadb_data:/var/lib/mysql
@@ -17,11 +21,19 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mariadb-admin", "ping", "--host=localhost", "--protocol=tcp"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   wordpress:
-    container_name: wordpress
-    build: ./requirements/wordpress
+    container_name: ${FRONTEND_HOSTNAME:-wordpress}
+    build:
+      context: ./requirements/wordpress
+      args:
+        WORDPRESS_PORT_INTERNAL: ${WORDPRESS_PORT_INTERNAL:-9000}
     image: wordpress:inception
+    pull_policy: build
     env_file: ./.env
     depends_on:
       mariadb:
@@ -35,17 +47,25 @@ services:
       - ${WORDPRESS_PORT_INTERNAL:-9000}
     secrets:
       - wordpress_user
-      - wordpress_user_password
       - wordpress_user_email
+      - wordpress_user_password
       - wordpress_admin
-      - wordpress_admin_password
       - wordpress_admin_email
+      - wordpress_admin_password
+      - mariadb_user
+      - mariadb_user_password
     restart: unless-stopped
 
   ngingx:
-    container_name: nginx
-    build: ./requirements/nginx
+    container_name: ${SERVER_HOSTNAME:-nginx}
+    build:
+      context: ./requirements/nginx
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME:-localhost}
+        NGINX_PORT_INTERNAL: ${NGINX_PORT_INTERNAL:-443}
+        WORDPRESS_PORT_INTERNAL: ${WORDPRESS_PORT_INTERNAL:-9000}
     image: nginx:inception
+    pull_policy: build
     env_file: ./.env
     depends_on:
       - wordpress

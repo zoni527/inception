@@ -34,6 +34,8 @@ RUN adduser -H -D -s /sbin/nologin -G www-data www-data
 COPY ./tools/wp_cli_install.sh .
 RUN chmod +x ./wp_cli_install.sh
 
-EXPOSE 9000
+ARG WORDPRESS_PORT_INTERNAL=9000
+
+EXPOSE ${WORDPRESS_PORT_INTERNAL}
 
 ENTRYPOINT ["./wp_cli_install.sh"]
