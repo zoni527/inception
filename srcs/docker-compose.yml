@@ -8,6 +8,8 @@ services:
     image: mariadb:inception
     pull_policy: build
     env_file: ./.env
+    environment:
+      - MYSQL_TCP_PORT=${MARIADB_PORT_INTERNAL:-3306}
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
@@ -20,7 +22,12 @@ services:
       - mariadb_root_password
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "--host=localhost", "--protocol=tcp"]
+      test: [
+        "CMD",
+        "mariadb-admin",
+        "ping",
+        "--host=localhost",
+        "--protocol=tcp"]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -56,15 +63,12 @@ services:
       - mariadb_user_password
     restart: unless-stopped
 
-  ngingx:
+  nginx:
     container_name: ${SERVER_HOSTNAME:-nginx}
     build:
       context: ./requirements/nginx
       args:
-        FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME:-wordpress}
         DOMAIN_NAME: ${DOMAIN_NAME:-localhost}
-        NGINX_PORT_INTERNAL: ${NGINX_PORT_INTERNAL:-443}
-        WORDPRESS_PORT_INTERNAL: ${WORDPRESS_PORT_INTERNAL:-9000}
     image: nginx:inception
     pull_policy: build
     env_file: ./.env

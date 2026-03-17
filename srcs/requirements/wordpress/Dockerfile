@@ -13,6 +13,7 @@ RUN apk update && apk add --no-cache \
 	php83-gd \
 	php83-zip \
 	php83-curl \
+	envsubst \
 	wget
 
 # WordPress files and client (php archive) from tarball
@@ -25,8 +26,8 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 	mv wp-cli.phar /usr/local/bin/wp && \
 	apk del wget
 
-# Config for php FastCGI Process Manager
-COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
+# Config template for php FastCGI Process Manager
+COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf.template
 
 # -H: no home, -D: no password, -s: login shell, -G: add group also
 RUN adduser -H -D -s /sbin/nologin -G www-data www-data
