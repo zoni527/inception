@@ -15,7 +15,7 @@ wordpress_user="$(cat /run/secrets/wordpress_user)"
 wordpress_user_email="$(cat /run/secrets/wordpress_user_email)"
 wordpress_user_password="$(cat /run/secrets/wordpress_user_password)"
 
-if [ ! -f /app/wp-config.php ]; then
+if [ ! -f ./wp-config.php ]; then
 	wp config create \
 		--dbname=${dbname} \
 		--dbuser=${dbuser} \
@@ -36,7 +36,7 @@ if [ ! -f /app/wp-config.php ]; then
 		--user_pass=${wordpress_user_password} \
 		--allow-root
 
-	chown -R www-data:www-data /app
+	chown -R www-data:www-data .
 fi
 
 exec php-fpm83 -F

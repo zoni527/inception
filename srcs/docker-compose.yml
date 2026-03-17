@@ -61,6 +61,7 @@ services:
     build:
       context: ./requirements/nginx
       args:
+        FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME:-wordpress}
         DOMAIN_NAME: ${DOMAIN_NAME:-localhost}
         NGINX_PORT_INTERNAL: ${NGINX_PORT_INTERNAL:-443}
         WORDPRESS_PORT_INTERNAL: ${WORDPRESS_PORT_INTERNAL:-9000}
@@ -69,6 +70,8 @@ services:
     env_file: ./.env
     depends_on:
       - wordpress
+    volumes:
+      - wordpress_data:/app:ro
     networks:
       - nginx_wordpress
     ports:
