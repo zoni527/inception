@@ -2,11 +2,12 @@
 [Basic installation](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
 [Wordpress config creation using wp client](https://developer.wordpress.org/cli/commands/config/create/)
 [Nginx setup examples](https://developer.wordpress.org/advanced-administration/server/web-server/nginx/)
-
 # MariaDB
 [Remote access guide](https://mariadb.com/docs/server/mariadb-quickstart-guides/mariadb-remote-connection-guide)
 [Database install CLI program](https://mariadb.com/docs/server/clients-and-utilities/deployment-tools/mariadb-install-db/)
-
+# nginx
+https://nginx.org/en/docs/example.html
+https://nginx.org/en/docs/beginners_guide.html
 # Various
 https://stackoverflow.com/questions/40801772/what-is-the-difference-between-ports-and-expose-in-docker-compose
 https://stackoverflow.com/questions/11245144/replace-whole-line-containing-a-string-using-sed

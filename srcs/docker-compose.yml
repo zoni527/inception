@@ -65,10 +65,7 @@ services:
 
   nginx:
     container_name: ${SERVER_HOSTNAME:-nginx}
-    build:
-      context: ./requirements/nginx
-      args:
-        DOMAIN_NAME: ${DOMAIN_NAME:-localhost}
+    build: ./requirements/nginx
     image: nginx:inception
     pull_policy: build
     env_file: ./.env

@@ -11,10 +11,6 @@ RUN apk update && apk add --no-cache mariadb mariadb-client
 COPY ./tools/mariadb_install.sh .
 RUN chmod +x ./mariadb_install.sh
 
-# The MYSQL_TCP_PORT is defined here as an environment variable just in case.
-# It is an environment variable often referenced by database software, but I
-# also explicitly set it as the --port option value when starting the mariadb
-# daemon process.
 ARG MYSQL_TCP_PORT=3306
 EXPOSE ${MYSQL_TCP_PORT}
 
