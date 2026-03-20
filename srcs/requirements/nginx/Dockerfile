@@ -1,5 +1,7 @@
 FROM alpine:3.22
 
+WORKDIR /app
+
 RUN apk update && apk add --no-cache nginx envsubst openssl
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf.template

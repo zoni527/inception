@@ -32,11 +32,11 @@ COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf.template
 # -H: no home, -D: no password, -s: login shell, -G: add group also
 RUN adduser -H -D -s /sbin/nologin -G www-data www-data
 
-COPY ./tools/wp_cli_install.sh .
-RUN chmod +x ./wp_cli_install.sh
+COPY ./tools/wordpress_entrypoint.sh .
+RUN chmod +x wordpress_entrypoint.sh
 
 ARG WORDPRESS_PORT_INTERNAL=9000
 
 EXPOSE ${WORDPRESS_PORT_INTERNAL}
 
-ENTRYPOINT ["./wp_cli_install.sh"]
+ENTRYPOINT ["./wordpress_entrypoint.sh"]

@@ -9,7 +9,7 @@ re: fclean all
 # ---------------------------------------------------------------------------- #
 up:
 	if ! grep -q ${USER} /etc/hosts; then \
-		echo ${USER}.42.fr | doas tee -a /etc/hosts > /dev/null; \
+		echo "127.0.0.1	${USER}.42.fr" | doas tee -a /etc/hosts > /dev/null; \
 	fi
 	mkdir -p ${HOME}/data/mariadb
 	mkdir -p ${HOME}/data/wordpress
