@@ -14,30 +14,40 @@ file's values as seamlessly as possibly, which means multiple levels of inherita
 (`.env`->`docker-compose.yaml`->`Dockerfile`->`script files`). This can be done using
 environment variables, build time arguments, and modifying config files using `envsubst`
 and `sed`.
-## Requirements
+## Requirements & dependencies
 - Linux Kernel (through OS, VM, WSL...)
-- make
-- docker
-- docker compose
-## Comparisons (required for evaluation)
+- Git
+- GNU Make
+- Docker
+- Docker Compose
+## Comparisons
 ### Virtual Machines vs Docker
 Virtual machines run on a hypervisor which simulates a computer's hardware.
 The virtual machine's operating system and software then run on top of that
-hypervisor. In contrast Docker runs containers which are isolated packages
-of dependencies (OS and software) that run on top of the existing Linux
-Kernel of the host operating system, so no hypervisor. Isolation is achieved
-using Linux namespaces.
+hypervisor.
+
+In contrast Docker runs containers which are isolated collections of dependencies
+(OS and software) that run on top of the existing Linux Kernel of the host operating
+system, so no hypervisor. Isolation is achieved using Linux namespaces.
 ### Secrets vs Environment Variables
 Environment variables are available in each container shell that inherit them,
 both during build and runtime. Secrets have to be explicitly selected one by
 one for each container, and docker saves them in an encrypted state.
 ### Docker Network vs Host Network
 Docker networks by default are isolated bridge networks, meaning that you can't
-connect to the containers through the host's regular network. This is good for
-security as there is no easy direct interface to every container. You can make
-selected ports in selected containers available to the host/the internet by
+connect to containers from the host by default, only hosts can communicate with
+each other over the bridge(s). This is good for security as the containers are
+isolated from the host and internet. Also published ports in the docker network
+don't collide with the host network, meaning if 443 is taken on the host you can
+still use it in the docker network.
+
+You can make specific container ports available to the host/the internet by
 publishing ports, `127.0.0.1:<host port>:<container port>` for only host
 access, `[0.0.0.0:]<host port>:<container port>` for the whole network.
+
+You can also make a docker network with network mode `host`, but then all container
+ports will be accessible from the host/the whole internet, depending if you limit
+the access IP. This can be dangerous and/or increase the risk of port collisions.
 ### Docker Volumes vs Bind Mounts
 Docker volumes are like virtual hard drives that can persist over the lifetime
 of containers, which would normally lose their runtime context when stopped.
@@ -64,6 +74,23 @@ By default secrets reside in `./secrets`. The required secret files are:
 - wordpress_user_password.txt
 # Resources
 ## Links
+### Wordpress
+- [Basic installation](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
+- [Wordpress config creation using wp client](https://developer.wordpress.org/cli/commands/config/create/)
+- [php FPM configuration](https://www.php.net/manual/en/install.fpm.configuration.php)
+### MariaDB
+- [Remote access guide](https://mariadb.com/docs/server/mariadb-quickstart-guides/mariadb-remote-connection-guide)
+- [Database install CLI program](https://mariadb.com/docs/server/clients-and-utilities/deployment-tools/mariadb-install-db/)
+### nginx
+- [Example](https://nginx.org/en/docs/example.html)
+- [Beginners guide](https://nginx.org/en/docs/beginners_guide.html)
+- [Nginx setup examples](https://developer.wordpress.org/advanced-administration/server/web-server/nginx/)
+- [Using environment variables in nginx config](https://www.baeldung.com/linux/nginx-config-environment-variables)
+### Various
+- [Difference between ports and expose](https://stackoverflow.com/questions/40801772/what-is-the-difference-between-ports-and-expose-in-docker-compose)
+- [Replace whole line with sed](https://stackoverflow.com/questions/11245144/replace-whole-line-containing-a-string-using-sed)
+- [Avoiding docker's cache in builds](https://stackoverflow.com/questions/49118579/alpine-dockerfile-advantages-of-no-cache-vs-rm-var-cache-apk)
+- [OpenSSL request options](https://docs.openssl.org/master/man1/openssl-req/#options)
 ## AI use
 I troubleshooted the communication between nginx and WordPress using ChatGPT,
 Claude and Gemini. Interistingly Gemini worked best for me, and it found some

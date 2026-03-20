@@ -13,7 +13,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
-      - wordpress_mariadb
+      - inception_network
     expose:
       - ${MARIADB_PORT_INTERNAL:-3306}
     secrets:
@@ -48,8 +48,7 @@ services:
     volumes:
       - wordpress_data:/app
     networks:
-      - wordpress_mariadb
-      - nginx_wordpress
+      - inception_network
     expose:
       - ${WORDPRESS_PORT_INTERNAL:-9000}
     secrets:
@@ -74,7 +73,7 @@ services:
     volumes:
       - wordpress_data:/app:ro
     networks:
-      - nginx_wordpress
+      - inception_network
     ports:
       - "${NGINX_PORT_HOST:-443}:${NGINX_PORT_INTERNAL:-443}"
     restart: unless-stopped
@@ -96,9 +95,7 @@ volumes:
       device: ${HOME}/data/wordpress
 
 networks:
-  wordpress_mariadb:
-    driver: bridge
-  nginx_wordpress:
+  inception_network:
     driver: bridge
 
 secrets:

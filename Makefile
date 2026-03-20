@@ -1,7 +1,15 @@
+# ---------------------------------------------------------------------------- #
+all: up
+
+clean: down
+
+fclean: nuke
+
+re: fclean all
+# ---------------------------------------------------------------------------- #
 up:
-	line="127.0.0.1	${USER}.42.fr"; \
 	if ! grep -q ${USER} /etc/hosts; then \
-		echo ${line} | doas tee -a /etc/hosts > /dev/null; \
+		echo ${USER}.42.fr | doas tee -a /etc/hosts > /dev/null; \
 	fi
 	mkdir -p ${HOME}/data/mariadb
 	mkdir -p ${HOME}/data/wordpress
@@ -11,8 +19,22 @@ up:
 		up --detach
 
 down:
-	cd ./srcs; \
-	docker compose down -v
+	docker compose \
+		--file ./srcs/docker-compose.yml \
+		--env-file ./srcs/.env \
+		down --volumes
+
+build:
+	docker compose \
+		--file ./srcs/docker-compose.yml \
+		--env-file ./srcs/.env \
+		build
+
+rebuild:
+	docker compose \
+		--file ./srcs/docker-compose.yml \
+		--env-file ./srcs/.env \
+		build --no-cache
 
 nuke: down
 	if grep -q ${USER} /etc/hosts; then \
@@ -23,6 +45,8 @@ nuke: down
 	docker rmi --force mariadb:inception
 	docker rmi --force wordpress:inception
 	docker rmi --force nginx:inception
-	docker system prune
+	docker system prune --force --volumes
 
-.PHONY: up down nuke
+# ---------------------------------------------------------------------------- #
+.PHONY: all clean fclean re up down build rebuild nuke
+# ---------------------------------------------------------------------------- #

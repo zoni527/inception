@@ -1,23 +1,20 @@
-# Services/Stack
-- Database: MariaDB
-- Frontend: WordPress
-- Server:   nginx
-# Credentials
-Placed in `./secrets` directory, files link to `./srcs/.env`. Required secrets:
-- mariadb_user.txt
-- mariadb_user_password.txt
-- mariadb_root_password.txt
-- wordpress_admin.txt
-- wordpress_admin_email.txt
-- wordpress_admin_password.txt
-- wordpress_user.txt
-- wordpress_user_email.txt
-- wordpress_user_password.txt
-Use strong passwords.
-
-Script for creating password files, run in repo root folder (fill in passwords yourself):
+# Set up environment from scratch
+## Prerequisites
+- Linux Kernel (through OS, VM, WSL...)
+- Git
+- GNU Make
+- Docker
+- Docker Compose
+## Steps
+1. Install prerequisites
+2. Clone repository and `cd` into it
+3. Setup credentials
+4. Setup environment file `srcs/.env`
+5. Run `make up`
+## Credential files
+Script for creating credential files:
 ```bash
-make -p ./secrets
+mkdir -p ./secrets
 touch ./secrets/mariadb_user.txt
 touch ./secrets/mariadb_user_password.txt
 touch ./secrets/mariadb_root_password.txt
@@ -28,16 +25,18 @@ touch ./secrets/wordpress_user.txt
 touch ./secrets/wordpress_user_email.txt
 touch ./secrets/wordpress_user_password.txt
 ```
-Example `.env` file creation script:
+Need to be filled in, use strong credentials.
+## Environment file
+Example default environment file creation script, place in `srcs/`:
 ```bash
-cat << EOF > ./.env
+cat << EOF > .env
 DATABASE_HOSTNAME=mariadb
 FRONTEND_HOSTNAME=wordpress
 SERVER_HOSTNAME=nginx
 
 DOMAIN_NAME=${USER}.42.fr
 
-NGINX_PORT_HOST=4321
+NGINX_PORT_HOST=443
 NGINX_PORT_INTERNAL=443
 
 MARIADB_DATABASE_NAME=wordpress
@@ -57,32 +56,24 @@ WORDPRESS_ADMIN_EMAIL_FILE=../secrets/wordpress_admin_email.txt
 WORDPRESS_ADMIN_PASSWORD_FILE=../secrets/wordpress_admin_password.txt
 EOF
 ```
-# Access website
-```
-https://<domain_name>[:nginx_host_port]
-```
-# Access WordPress admin panel
-```
-https://<domain_name>[:nginx_host_port]/wp-admin
-```
-# Monitoring
-## Running containers
+# Managing containers
+## Building
+### Using Make
 ```bash
-docker compose ps
+make build
 ```
-or
+To force a complete rebuild use
 ```bash
-docker ps
+make rebuild
 ```
-## Processes withing containers
+### Using Docker Compose
+Run in `srcs/`
 ```bash
-docker exec <container_name> ps aux
+docker compose --env-file .env build
 ```
-## Logs
+To force a complete rebuild use
 ```bash
-docker logs <container_name>
+docker compose --env-file .env build --no-cache
 ```
-or
-```bash
-docker exec <container_name> cat <path_to_log_file>
-```
+## Launching
+## Data storage
