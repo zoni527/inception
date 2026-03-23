@@ -21,6 +21,8 @@ wordpress_user="$(cat /run/secrets/wordpress_user)"
 wordpress_user_email="$(cat /run/secrets/wordpress_user_email)"
 wordpress_user_password="$(cat /run/secrets/wordpress_user_password)"
 
+mkdir -p /var/log/fpm-php
+
 if [ ! -f ./wp-config.php ]; then
 	wp config create \
 		--dbname=${dbname} \
