@@ -8,7 +8,7 @@ fclean: nuke
 re: fclean all
 # ---------------------------------------------------------------------------- #
 up:
-	if ! grep -q ${USER} /etc/hosts; then \
+	if ! grep -q ${USER}.42.fr /etc/hosts; then \
 		echo "127.0.0.1	${USER}.42.fr" | doas tee -a /etc/hosts > /dev/null; \
 	fi
 	mkdir -p ${HOME}/data/mariadb
@@ -42,8 +42,8 @@ rebuild: rmi
 		build --no-cache
 
 nuke: down rmi
-	if grep -q ${USER} /etc/hosts; then \
-		doas sed -i "/${USER}/d" /etc/hosts; \
+	if grep -q ${USER}.42.fr /etc/hosts; then \
+		doas sed -i "/${USER}.42.fr/d" /etc/hosts; \
 	fi
 	doas chown -R ${USER} ${HOME}/data
 	rm -rf ${HOME}/data
