@@ -35,11 +35,7 @@ build:
 		--env-file ./srcs/.env \
 		build
 
-rebuild: rmi
-	docker compose \
-		--file ./srcs/docker-compose.yml \
-		--env-file ./srcs/.env \
-		build --no-cache
+rebuild: rmi build
 
 nuke: down rmi
 	if grep -q ${USER}.42.fr /etc/hosts; then \
